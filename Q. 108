@@ -1,0 +1,60 @@
+108. Convert Sorted Array to Binary Search Tree
+
+Given an integer array nums where the elements are sorted in ascending order, convert it to a height-balanced binary search tree.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node{
+    int data;
+    struct node* left;
+    struct node* right;
+};
+
+struct node* create(int data){
+    struct node* newnode = (struct node*)malloc(sizeof(struct node));
+    newnode->data = data;
+    newnode->left = NULL;
+    newnode->right = NULL;
+    return newnode;
+}
+
+struct node* insertarray(int arr[], int start, int end){
+    if(start>end) return NULL;
+    
+    int mid = (start+end)/2;
+    struct node* root = create(arr[mid]);
+    
+    root->left = insertarray(arr, start, mid-1);
+    root->right = insertarray(arr, mid + 1, end);
+    
+    return root;
+}
+
+void inorder(struct node* root){
+    if(root!=NULL){
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+int main(){
+    int n;
+    scanf("%d", &n);
+    struct node* root = NULL;
+    int arr[n];
+    for(int i=0; i<n; i++){
+        scanf("%d", &arr[i]);
+    }
+    
+    for(int i=0; i<n; i++){
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+    root = insertarray(arr, 0, n-1);
+    inorder(root);
+    return 0;
+}
