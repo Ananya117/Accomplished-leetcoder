@@ -1,0 +1,57 @@
+100. Same Tree
+
+Given the roots of two binary trees p and q, write a function to check if they are the same or not.
+Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node{
+    int data;
+    struct node* left;
+    struct node* right;
+};
+
+struct node* create(int data){
+    struct node* newnode = (struct node*)malloc(sizeof(struct node));
+    newnode->data = data;
+    newnode->left = NULL;
+    newnode->right = NULL;
+    return newnode;
+}
+
+struct node* insert(struct node* root, int data){
+    if(root==NULL) return create(data);
+    if(data > root->data) root->right = insert(root->right, data);
+    else if(data < root->data) root->left = insert(root->left, data);
+    return root;
+}
+
+int issame(struct node* root1, struct node* root2){
+    if(root1==NULL && root2==NULL) return 1;
+    else if(root1==NULL || root2==NULL) return 0;
+    return ((root1->data==root2->data) && issame(root1->left,root2->left) && issame(root1->right,root2->right));
+}
+
+int main(){
+    int n1,n2;
+    scanf("%d", &n1);
+    struct node* root1 = NULL;
+    for(int i=0; i<n1; i++){
+        int data;
+        scanf("%d", &data);
+        root1 = insert(root1, data);
+    }
+    scanf("%d", &n2);
+    struct node* root2 = NULL;
+    for(int i=0; i<n2; i++){
+        int data;
+        scanf("%d", &data);
+        root2 = insert(root2, data);
+    }
+    if(issame(root1, root2)) printf("True");
+    else printf("False");
+    return 0;
+}
